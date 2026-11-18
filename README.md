@@ -10,21 +10,25 @@ This repository contains study materials for the **Claude Certified Architect â€
 
 ## Course Access
 
-- Certification is currently restricted to members of the Anthropic Partner Network and requires registration with a verified partner company email. Claude Partner Network: https://claude.com/partners
-- Free for the first 5,000 partner company employees. General availability will be $99.
 - To request access to the official course/exam portal, use this link: https://anthropic.skilljar.com/claude-certified-architect-foundations-access-request
 
 ## Study Guide
 
-- **English guide**: [`guide_en.md`](./guide_en.MD)
+- **English guide**: [`guide_en.md`](./guide_en.md)
 - **Spanish guide**: [`guide_es.md`](./guide_es.md)
-- **Russian guide**: [`guide_ru.md`](./guide_ru.MD)
+- **Russian guide**: [`guide_ru.md`](./guide_ru.md)
 - **Chinese guide**: [`guide_zh.md`](./guide_zh.md)
 - **Japanese guide**: [`guide_ja.md`](./guide_ja.md)
 - **Urdu guide**: [`guide_ur.md`](./guide_ur.md)
-- **Arabic guide**: [`guide_ar.MD`](./guide_ar.MD)
+- **Arabic guide**: [`guide_ar.md`](./guide_ar.md)
 - **Hebrew guide**: [`guide_he.md`](./guide_he.md)
 - **Korean guide**: [`guide_ko.md`](./guide_ko.md)
+- **Italian guide**: [`guide_it.md`](./guide_it.md)
+- **Traditional Chinese (Taiwan) guide**: [`guide_zh-tw.md`](./guide_zh-tw.md)
+- **Vietnamese guide**: [`guide_vi.md`](./guide_vi.md)
+- **Turkish guide**: [`guide_tr.md`](./guide_tr.md)
+- **French guide**: [`guide_fr.md`](./guide_fr.md)
+- **Portuguese (Brazil) guide**: [`guide_pt-br.md`](./guide_pt-br.md)
 
 ## PDF Version
 
@@ -37,12 +41,63 @@ This repository contains study materials for the **Claude Certified Architect â€
 - **Arabic guide**: [`guide_ar.pdf`](./pdf/guide_ar.pdf)
 - **Hebrew guide**: [`guide_he.pdf`](./pdf/guide_he.pdf)
 - **Korean guide**: [`guide_ko.pdf`](./pdf/guide_ko.pdf)
+- **Italian guide**: [`guide_it.pdf`](./pdf/guide_it.pdf)
+- **Traditional Chinese (Taiwan) guide**: [`guide_zh-tw.pdf`](./pdf/guide_zh-tw.pdf)
+- **Vietnamese guide**: [`guide_vi.pdf`](./pdf/guide_vi.pdf)
+- **Turkish guide**: [`guide_tr.pdf`](./pdf/guide_tr.pdf)
+- **French guide**: [`guide_fr.pdf`](./pdf/guide_fr.pdf)
+- **Portuguese (Brazil) guide**: [`guide_pt-br.pdf`](./pdf/guide_pt-br.pdf)
+
+## EPUB Version
+
+- **English guide**: [`guide_en.epub`](./epub/guide_en.epub)
+- **Spanish guide**: [`guide_es.epub`](./epub/guide_es.epub)
+- **Russian guide**: [`guide_ru.epub`](./epub/guide_ru.epub)
+- **Chinese guide**: [`guide_zh.epub`](./epub/guide_zh.epub)
+- **Japanese guide**: [`guide_ja.epub`](./epub/guide_ja.epub)
+- **Urdu guide**: [`guide_ur.epub`](./epub/guide_ur.epub)
+- **Arabic guide**: [`guide_ar.epub`](./epub/guide_ar.epub)
+- **Hebrew guide**: [`guide_he.epub`](./epub/guide_he.epub)
+- **Korean guide**: [`guide_ko.epub`](./epub/guide_ko.epub)
+- **Italian guide**: [`guide_it.epub`](./epub/guide_it.epub)
+- **Traditional Chinese (Taiwan) guide**: [`guide_zh-tw.epub`](./epub/guide_zh-tw.epub)
+- **Vietnamese guide**: [`guide_vi.epub`](./epub/guide_vi.epub)
+- **Turkish guide**: [`guide_tr.epub`](./epub/guide_tr.epub)
+- **French guide**: [`guide_fr.epub`](./epub/guide_fr.epub)
+- **Portuguese (Brazil) guide**: [`guide_pt-br.epub`](./epub/guide_pt-br.epub)
+
+## Anki Deck (Practical Test)
+
+- **English**: [`practical_test_en.apkg`](./anki/practical_test_en.apkg)
+- **French**: [`practical_test_fr.apkg`](./anki/practical_test_fr.apkg)
+- **Japanese**: [`practical_test_ja.apkg`](./anki/practical_test_ja.apkg)
+- **Korean**: [`practical_test_ko.apkg`](./anki/practical_test_ko.apkg)
+- **Russian**: [`practical_test_ru.apkg`](./anki/practical_test_ru.apkg)
+- **Chinese**: [`practical_test_zh.apkg`](./anki/practical_test_zh.apkg)
+- **Portuguese (Brazil)**: [`practical_test_pt-br.apkg`](./anki/practical_test_pt-br.apkg)
+- **Spanish**: [`practical_test_es.apkg`](./anki/practical_test_es.apkg)
+
+## Video Materials
+- **English**: [`NotebookML`](https://notebooklm.google.com/notebook/4ffc65a7-5395-4a36-8832-23ed9b57f369)
 
 ## How to Use
 
 - Read the guide that matches your preferred language.
 - Work through the scenarios and questions.
 - Use the **Practical Exercises** section to rehearse key patterns (tool design, MCP integration, structured output, context management, and reliability).
+
+## How to Read the Practical Test Questions
+
+The practical test questions come from the real exam materials and are kept as they are. Some of them are deliberately compact: the correct answer often depends on one deciding phrase in the stem, while the stem leaves out details an engineer would normally ask about (traffic share, cost, whether the tools can be changed). Wording like this can be debated, and that is fine.
+
+A few habits that help:
+
+- Look for the deciding phrase: "most effective **first** step", "tool descriptions are clear", "incorrect refunds", and similar.
+- Ask what the proportionate first step is. Prefer the change that fixes the root cause with the least new machinery.
+- Separate guidance from guarantees. If a rule must always hold (for example, call order), the answer is usually programmatic enforcement, not a stronger prompt.
+- Use disagreement as a learning tool. Vote alone, discuss in pairs, vote again, and then read the explanation.
+
+Thanks to [Silvan MÃ¼hlemann](https://github.com/silvanm) and the team at mÃ¼hlemann+popp for the thoughtful feedback in [issue #53](https://github.com/paullarionov/claude-certified-architect/issues/53).
 
 ## Free Anthropic Courses
 
@@ -66,6 +121,7 @@ This repository contains study materials for the **Claude Certified Architect â€
 
 - Claude Code: Commands Cheatsheet https://claude-guides.com
 - Top 80 Claude Skills, Agents & GitHub Repos for AI â€” The Complete Guide https://x.com/paullarionov/status/2038254131849134220
+- Claude Certified Architect in Spanish â€” study guides for Foundations and Professional, an ENâ†’ES glossary, and a free 163-question practice simulator (no signup) https://github.com/juanmartincoma-collab/claude-certified-architect-es
 
 ## How to Contribute
 

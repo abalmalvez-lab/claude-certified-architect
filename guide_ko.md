@@ -146,10 +146,31 @@ Claude API는 요청을 보내고 응답을 받는 방식으로 동작합니다.
 
 ## 1.2 메시지 역할
 
-`messages` 배열에는 다음 세 가지 역할이 들어갑니다.
-- `user` — 사용자 메시지
-- `assistant` — 모델 응답(기록을 보낼 때 포함)
-- `tool` — tool 호출 결과(역할이 명시적으로 설정되지는 않으며, `tool_result` 콘텐츠 블록으로 나타남)
+`messages` 배열에는 두 가지 대화 역할과 한 가지 지시 역할이 있습니다.
+- `user` — 사용자 메시지. tool 결과도 포함됩니다(별도의 `tool` 역할이 아니라 `user` 역할 메시지 안의 `tool_result` 콘텐츠 블록으로 전송됨)
+- `assistant` — 모델 응답(기록을 보낼 때 포함), tool 사용 요청(`tool_use` 콘텐츠 블록)도 포함됨
+- `system` — 최상위 `system` 필드로 설정하거나(첫 번째 turn부터 적용), `messages` 안에 `{"role": "system", ...}`로 인라인 삽입할 수 있습니다(그 시점부터 적용되며, 아래의 배치 규칙을 따릅니다)
+
+tool 결과는 `"tool"` 역할 메시지로 전송되지 않습니다. `user` 역할 메시지로 전송되며, 그 content에 `tool_result` 콘텐츠 블록이 포함됩니다.
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01...",
+      "content": "..."
+    }
+  ]
+}
+```
+
+`system`은 최상위 `system` 파라미터뿐 아니라 `messages` 배열 안에 역할로 직접 나타날 수도 있습니다. 이는 최상위 `system` 필드의 캐시된 prefix를 무효화하지 않으면서 대화 중간에 지시를 추가하기 위한 것입니다. 여기에는 다음과 같은 배치 규칙이 있습니다.
+- `user` turn(`tool_result` 블록이 있는 turn 포함) 또는 서버 tool 사용으로 끝나는 `assistant` turn 바로 뒤에 와야 합니다.
+- `assistant` turn 앞에 오거나 배열의 마지막 항목이어야 합니다.
+- `tool_use` 블록과 그에 대응하는 `tool_result` 사이에 위치할 수 없습니다 — 그렇게 하면 400 오류가 반환됩니다.
+- 이후에 오는 `system` 메시지(대화 중간에 삽입된 것 포함)는 이전 메시지 및 이후 turn에 대한 최상위 `system` 필드보다 우선합니다.
 
 **중요:** API를 호출할 때마다 **전체 대화 기록**을 함께 보내야 합니다. Claude는 요청 사이의 상태를 서버에 저장하지 않으므로, 각 호출은 독립적으로 처리됩니다.
 
@@ -2673,7 +2694,7 @@ Edit이 고유하지 않은 텍스트 일치 때문에 실패할 때:
 - C) 같은 이름으로 `~/.claude/skills/commit/SKILL.md`에 개인 버전을 만든다. **[정답]**
 - D) 개인 Skill frontmatter에 `override: true`를 설정해 프로젝트 버전보다 우선하게 한다.
 
-**C인 이유:** 같은 이름의 개인 Skill은 프로젝트 Skill보다 우선합니다. `~/.claude/skills/commit/SKILL.md`의 개인 Skill은 팀의 프로젝트 Skill을 override해, 개발자가 개인 용도로 익숙한 `/commit` 명령 이름을 유지하면서 workflow를 사용자 지정할 수 있습니다. 이 접근은 원래 명령 이름을 보존해 개인 workflow는 유지하면서 팀원에게 영향을 주지 않으므로 A보다 낫습니다.
+**C인 이유:** Skill 해석은 위치에 따라 결정됩니다. 엔터프라이즈가 개인을 덮어쓰고, 개인이 프로젝트를 덮어씁니다. 따라서 `~/.claude/skills/commit/SKILL.md`에 둔 개인 Skill은 그 개발자에게만 팀의 `.claude/skills/commit/SKILL.md`를 가립니다. 저장소에는 아무 변경도 생기지 않으므로 팀원들은 계속 프로젝트 버전을 실행하고, 다른 모두에게 `/commit`은 그대로 동작합니다. A는 동작 자체는 하지만 더 약한 권장안입니다. 프로젝트의 `/commit`이 `/my-commit`과 함께 계속 활성 상태로 남고, `description`이 거의 같은 Skill이 둘이면 Claude의 자동 Skill 선택이 예측하기 어려워지며, `/commit`을 실행하도록 안내하는 팀 문서와 몸에 익은 습관도 깨집니다. B는 Skill frontmatter에 조건부 로직이나 사용자 이름 기능이 없고, 시나리오가 배제한 공유 프로젝트 파일을 수정해야 하므로 맞지 않습니다. D는 `override` 필드 자체가 없기 때문에 틀립니다. 우선순위는 선언이 아니라 위치에서 나옵니다.
 
 ---
 

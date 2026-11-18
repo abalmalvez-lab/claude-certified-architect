@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build practical_test_<lang>.html for one or all languages.
-Usage: python3 build_html.py [lang]   (lang: en, ru, ja, zh — default: all)
+Usage: python3 build_html.py [lang]   (lang: en, it, ru, ja, zh, zh-tw — default: all)
 """
 import json, subprocess, os, sys
 
@@ -13,6 +13,10 @@ LANG_TITLES = {
     "ru": "Claude Certified Architect \u2014 \u041f\u0440\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0442\u0435\u0441\u0442",
     "ja": "Claude Certified Architect \u2014 \u7df4\u7fd2\u30c6\u30b9\u30c8",
     "zh": "Claude Certified Architect \u2014 \u6a21\u62df\u6d4b\u8bd5",
+    "it": "Claude Certified Architect \u2014 Test Pratico",
+    "zh-tw": "Claude Certified Architect \u2014 \u6a21\u64ec\u6e2c\u9a57",
+    "pt-br": "Claude Certified Architect \u2014 Teste Prático",
+    "es": "Claude Certified Architect \u2014 Test Práctico",
 }
 
 def get_questions(lang):

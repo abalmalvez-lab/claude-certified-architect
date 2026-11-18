@@ -146,10 +146,31 @@ The Claude API follows a request–response model. Each request to the Claude Me
 
 ## 1.2 Message Roles
 
-The `messages` array uses three roles:
-- `user` — user messages
-- `assistant` — model responses (included when sending history)
-- `tool` — tool call results (the role is not explicitly set; this appears as a `tool_result` content block)
+The `messages` array uses two conversational roles plus one instructional role:
+- `user` — user messages, including tool results (sent as a `tool_result` content block within a `user`-role message, not as a separate `tool` role)
+- `assistant` — model responses (included when sending history), including tool use requests (`tool_use` content blocks)
+- `system` — can be set via the top-level `system` field (applies from the first turn) or inline in `messages` as `{"role": "system", ...}` (applies from that point onward, subject to placement rules — see below)
+
+Tool results are not sent as a role: `"tool"` message. They're sent as a `user`-role message whose content includes a `tool_result` content block:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01...",
+      "content": "..."
+    }
+  ]
+}
+```
+
+`system` can also appear as a role directly in the `messages` array, not just via the top-level `system` parameter. This is meant for adding instructions mid-conversation without invalidating the cached prefix from the top-level `system` field. It has specific placement rules:
+- Must immediately follow a `user` turn (including one with `tool_result` blocks) or an `assistant` turn ending in server tool use.
+- Must precede an `assistant` turn or end the array.
+- Cannot sit between a `tool_use` block and its `tool_result`—doing so returns a 400 error.
+- Later `system` messages (including mid-conversation ones) take precedence over earlier ones and over the top-level `system` field for turns that follow.
 
 **Critically important:** on every API request you must send the **full conversation history**. The model does not persist state between requests—each call is independent.
 
@@ -2671,7 +2692,7 @@ When Edit fails due to a non-unique text match:
 - C) Create a personal version at `~/.claude/skills/commit/SKILL.md` with the same name. **[CORRECT]**
 - D) Set `override: true` in the personal skill frontmatter to prioritize it over the project version.
 
-**Why C:** Personal skills take precedence over project skills with the same name. A personal skill at `~/.claude/skills/commit/SKILL.md` will override the team’s project skill, allowing the developer to customize their workflow while maintaining the familiar `/commit` command name for their personal use. This approach is better than option A because it preserves the original command name, improving the developer’s workflow without affecting teammates.
+**Why C:** Skill resolution is positional: enterprise overrides personal, and personal overrides project. A personal skill at `~/.claude/skills/commit/SKILL.md` therefore shadows the team's `.claude/skills/commit/SKILL.md` for that developer alone — nothing in the repository changes, so teammates keep running the project version and `/commit` behaves the same for everyone else. A works mechanically but is the weaker recommendation: the project `/commit` stays active alongside `/my-commit`, and two skills with near-identical `description` fields make Claude's automatic skill selection unpredictable, while breaking the muscle memory and team docs that say to run `/commit`. B fails because skill frontmatter has no conditional or username facility, and it would require editing the shared project file the scenario rules out. D fails because there is no `override` field — precedence comes from location, not from a declaration.
 
 ---
 
